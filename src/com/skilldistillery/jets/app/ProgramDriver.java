@@ -14,8 +14,12 @@ public class ProgramDriver {
 
 	public void startupMenu() {
 		boolean running = true;
+		System.out.println("Attention on deck!");
+		System.out.println("The captain has the helm");
+		int choice = 0;
 
 		do {
+
 			System.out.println();
 			System.out.println("What are your orders?");
 			System.out.println("1. List fleet");
@@ -24,10 +28,11 @@ public class ProgramDriver {
 			System.out.println("4. View our longest range aircraft");
 			System.out.println("5. Scramble fighter jets to dogfight");
 			System.out.println("6. Spy on our enemies (with EW aircraft)");
-			System.out.println("7. Bring an aircraft up from the hangar (Add aircraft)");
-			System.out.println("8. Remove an aircraft from the flightdeck (Remove aircraft)");
-			System.out.println("9. Quit program");
-			int choice = keyboard.nextInt();
+			System.out.println("7. Fly an individual aircraft");
+			System.out.println("8. Bring an aircraft up from the hangar (Add aircraft)");
+			System.out.println("9. Remove an aircraft from the flightdeck (Remove aircraft)");
+			System.out.println("10. Quit program");
+			choice = keyboard.nextInt();
 
 			switch (choice) {
 			case 1:
@@ -45,7 +50,7 @@ public class ProgramDriver {
 				}
 				break;
 			case 3:
-				System.out.println("Our fastest jet is: ");
+				System.out.println("Our fastest aircraft is: ");
 				carrier.fastestAircraft();
 				break;
 			case 4:
@@ -61,6 +66,9 @@ public class ProgramDriver {
 				carrier.spyOnEnemies();
 				break;
 			case 7:
+				carrier.flyIndividualJet(keyboard);
+				break;
+			case 8:
 				System.out.println("What kind of aircraft is this?");
 				System.out.println("1. Fighter Jet");
 				System.out.println("2. Electronic Warfare");
@@ -85,16 +93,14 @@ public class ProgramDriver {
 					}
 				}
 				break;
-			case 8:
+			case 9:
 				System.out.println("Ok, which aircraft should we send to the hangar?");
 				carrier.removeAircraft(keyboard);
 				break;
-			case 9:
+			case 10:
 				System.out.println("Goodbye");
 				running = false;
 			}
-
 		} while (running);
 	}
-
 }

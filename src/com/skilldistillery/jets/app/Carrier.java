@@ -12,11 +12,14 @@ import com.skilldistillery.jets.models.EWJet;
 import com.skilldistillery.jets.models.FighterJet;
 import com.skilldistillery.jets.models.Helicopter;
 import com.skilldistillery.jets.models.Jet;
+import com.skilldistillery.jets.models.Pilot;
 
 public class Carrier {
 	List<Jet> importJet = new ArrayList<Jet>();
+	List<Pilot> pilotList = new ArrayList<>();
 
 	public Carrier() {
+		pilotList = generatePilots();
 		readFromTxtJets();
 	}
 
@@ -32,15 +35,16 @@ public class Carrier {
 				long price = Long.parseLong(newJet[2]);
 				double speed = Double.parseDouble(newJet[3]);
 				int range = Integer.parseInt(newJet[4]);
+				int randomPilot = ((int) (Math.random() * pilotList.size()));
+				Pilot pilot = pilotList.get(randomPilot);
 
 				if (newJet[0].equals("Fighter Jet")) {
-					importJet.add(new FighterJet(model, price, speed, range));
+					importJet.add(new FighterJet(model, price, speed, range, pilot));
 				} else if (newJet[0].equals("EW")) {
-					importJet.add(new EWJet(model, price, speed, range));
+					importJet.add(new EWJet(model, price, speed, range, pilot));
 				} else if (newJet[0].equals("Helicopter")) {
-					importJet.add(new Helicopter(model, price, speed, range));
+					importJet.add(new Helicopter(model, price, speed, range, pilot));
 				}
-
 			}
 
 			br.close();
@@ -63,7 +67,7 @@ public class Carrier {
 	}
 
 	public void fastestAircraft() {
-		Jet jet = new FighterJet(null, 0, 0, 0);
+		Jet jet = new FighterJet(null, 0, 0, 0, null);
 		double speed = 0;
 
 		for (int i = 0; i < importJet.size(); i++) {
@@ -78,7 +82,7 @@ public class Carrier {
 
 	public void longRangeAircraft() {
 
-		Jet jet = new FighterJet(null, 0, 0, 0);
+		Jet jet = new FighterJet(null, 0, 0, 0, null);
 		int range = 0;
 
 		for (int i = 0; i < importJet.size(); i++) {
@@ -114,6 +118,7 @@ public class Carrier {
 		long price;
 		double speed;
 		int range;
+		Pilot pilot;
 
 		System.out.println("What is the model of the aircraft?");
 		model = keyboard.nextLine();
@@ -123,8 +128,16 @@ public class Carrier {
 		speed = keyboard.nextDouble();
 		System.out.println("What is the maximum range of the aircraft?");
 		range = keyboard.nextInt();
+		System.out.println("What is the name of your pilot?");
+		keyboard.nextLine();
+		String pilotName = keyboard.nextLine();
+		System.out.println("What is the pilots rank?");
+		String rank = keyboard.nextLine();
 
-		importJet.add(new FighterJet(model, price, speed, range));
+		pilot = new Pilot(pilotName, rank);
+
+		importJet.add(new FighterJet(model, price, speed, range, pilot));
+		pilotList.add(pilot);
 	}
 
 	public void addElectricJet(Scanner keyboard) {
@@ -132,6 +145,7 @@ public class Carrier {
 		long price;
 		double speed;
 		int range;
+		Pilot pilot;
 
 		System.out.println("What is the model of the aircraft?");
 		model = keyboard.nextLine();
@@ -141,8 +155,16 @@ public class Carrier {
 		speed = keyboard.nextDouble();
 		System.out.println("What is the maximum range of the aircraft?");
 		range = keyboard.nextInt();
+		System.out.println("What is the name of your pilot?");
+		keyboard.nextLine();
+		String pilotName = keyboard.nextLine();
+		System.out.println("What is the pilots rank?");
+		String rank = keyboard.nextLine();
 
-		importJet.add(new EWJet(model, price, speed, range));
+		pilot = new Pilot(pilotName, rank);
+
+		importJet.add(new EWJet(model, price, speed, range, pilot));
+		pilotList.add(pilot);
 	}
 
 	public void addHelicopter(Scanner keyboard) {
@@ -150,6 +172,7 @@ public class Carrier {
 		long price;
 		double speed;
 		int range;
+		Pilot pilot;
 
 		System.out.println("What is the model of the aircraft?");
 		model = keyboard.nextLine();
@@ -159,22 +182,55 @@ public class Carrier {
 		speed = keyboard.nextDouble();
 		System.out.println("What is the maximum range of the aircraft?");
 		range = keyboard.nextInt();
+		System.out.println("What is the name of your pilot?");
+		keyboard.nextLine();
+		String pilotName = keyboard.nextLine();
+		System.out.println("What is the pilots rank?");
+		String rank = keyboard.nextLine();
 
-		importJet.add(new Helicopter(model, price, speed, range));
+		pilot = new Pilot(pilotName, rank);
+
+		importJet.add(new Helicopter(model, price, speed, range, pilot));
+		pilotList.add(pilot);
 	}
 
 	public void removeAircraft(Scanner keyboard) {
 		int counter = 1;
 		int input;
-		
-		
+
 		for (Jet jet : importJet) {
 			System.out.println(counter++ + ": " + jet);
 		}
 		System.out.println("Which would you like to send to the hangar?");
 		input = keyboard.nextInt();
-		
+
 		System.out.println(importJet.remove(input - 1) + " was removed");
-		
+
+	}
+
+	public void flyIndividualJet(Scanner keyboard) {
+		int counter = 1;
+		int input;
+
+		for (Jet jet : importJet) {
+			System.out.println(counter++ + ": " + jet.getModel());
+		}
+		System.out.println("Which aircraft would you like to pilot?");
+		input = keyboard.nextInt();
+
+		System.out.println("Prepping " + importJet.get(input - 1).getModel() + " now");
+
+	}
+
+	public List<Pilot> generatePilots() {
+		List<Pilot> pilots = new ArrayList<>();
+
+		pilots.add(new Pilot("Adams", "Lt. CMDR"));
+		pilots.add(new Pilot("Naranong", "Lt."));
+		pilots.add(new Pilot("Clark", "Lt."));
+		pilots.add(new Pilot("Fowler", "Lt. CMDR"));
+		pilots.add(new Pilot("Bennekin", "Lt. "));
+
+		return pilots;
 	}
 }
